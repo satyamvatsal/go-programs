@@ -7,16 +7,12 @@ type ListNode[T any] struct {
 
 type List[T any] struct {
 	head *ListNode[T]
-	size int
 	tail *ListNode[T]
+	size int
 }
 
 func NewList[T any]() *List[T] {
-	return &List[T]{
-		head: nil,
-		size: 0,
-		tail: nil,
-	}
+	return &List[T]{}
 }
 
 func NewListNode[T any]() *ListNode[T] {
@@ -47,11 +43,39 @@ func (l *List[T]) PushBack(data T) {
 	l.size++
 }
 
-func (l *List[T]) PopFront() {
+func (l *List[T]) PopFront() (data T, ok bool) {
 	if l.Empty() {
-		return
+		return data, false
 	}
+	data = l.head.Data
 	l.head = l.head.Next
+	if l.head == nil {
+		l.tail = nil
+	}
+	l.size--
+	return data, true
+}
+
+func (l *List[T]) PopBack() (data T, ok bool) {
+	if l.Empty() {
+		return data, false
+	}
+	head := l.head
+	data = l.tail.Data
+	if head.Next == nil {
+		// contains single element
+		l.head = nil
+		l.tail = nil
+		l.size--
+		return data, true
+	}
+	for head.Next != l.tail {
+		head = head.Next
+	}
+	head.Next = nil
+	l.tail = head
+	l.size--
+	return data, true
 }
 
 func (l *List[T]) Empty() bool {

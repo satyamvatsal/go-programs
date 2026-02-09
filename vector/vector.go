@@ -19,10 +19,7 @@ func NewVector[T any](capacity int) *Vector[T] {
 
 func (v *Vector[T]) PushBack(data T) {
 	if v.Size == v.Capacity {
-		newCap := 2 * v.Capacity
-		if newCap == 0 {
-			newCap = 1
-		}
+		newCap := 2*v.Capacity + 1
 		newArr := make([]T, newCap)
 		copy(newArr, v.arr)
 		v.arr = newArr
